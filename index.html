@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chip SMP</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0f1218;
+  color:white;
+}
+
+header{
+  text-align:center;
+  padding:20px;
+  font-size:28px;
+  font-weight:bold;
+}
+
+.navbar{
+  background:#0b0f17;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 25px;
+}
+
+.nav-title{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.nav-links a{
+  color:white;
+  text-decoration:none;
+  margin-left:15px;
+  font-weight:bold;
+}
+
+.nav-links a:hover{
+  color:#00c8ff;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  padding:30px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.card{
+  position:relative;
+  background:#1a1f2a;
+  border-radius:14px;
+  overflow:hidden;
+  height:180px;
+  transition:.2s ease;
+}
+
+.card:hover{
+  box-shadow:0 0 20px rgba(0,200,255,0.7);
+  transform:scale(1.02);
+}
+
+.img-box{
+  width:100%;
+  height:100%;
+}
+
+.img-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.text-box{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,0.9));
+  padding:15px;
+  font-size:15px;
+}
+
+.copy-card{
+  background:url("images/join.png") center/cover no-repeat;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.overlay{
+  background:rgba(0,0,0,0.65);
+  padding:20px 30px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.copy-card button{
+  background:#00c8ff;
+  color:black;
+  border:none;
+  padding:10px 18px;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.copy-card button:hover{
+  box-shadow:0 0 15px rgba(0,200,255,0.9);
+}
+
+.status-card{
+  background:#111;
+  border-radius:14px;
+  padding:18px 20px;
+  font-size:20px;
+  font-weight:bold;
+  text-align:center;
+  box-shadow:0 0 25px rgba(0,255,0,0.15);
+}
+
+.player-list{
+  margin-top:10px;
+  font-size:16px;
+  font-weight:normal;
+}
+
+@media(max-width:800px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="nav-title">ChipSMP</div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="store.html">Store</a>
+    <a href="https://discord.gg/MgPYSuJjNb" target="_blank">Discord</a>
+    <a href="partners.html">Partners</a>
+  </div>
+</nav>
+
+<header>Welcome to Chip SMP</header>
+
+<div class="grid">
+
+<div class="card">
+<div class="img-box">
+<img src="images/trump.png">
+</div>
+<div class="text-box">
+<b>Welcome</b><br>
+A fun survival server with custom features, events, and an awesome community.
+</div>
+</div>
+
+<div class="card">
+<div class="img-box">
+<img src="images/store-2.png">
+</div>
+<div class="text-box">
+<b>Store</b><br>
+Coming Soon!
+</div>
+</div>
+
+<div class="card">
+<div class="img-box">
+<img src="images/members.png">
+</div>
+<div class="text-box">
+<b>Members</b><br>
+Join hundreds of players on Chip SMP!
+</div>
+</div>
+
+<div class="card">
+<div class="img-box">
+<img src="images/67.jpg">
+</div>
+<div class="text-box">
+<b>How To Join</b><br>
+Discord: https://discord.gg/MgPYSuJjNb<br>
+Join our Discord for whitelist access.
+</div>
+</div>
+
+<div class="card copy-card">
+<div class="overlay">
+<div style="font-size:20px;font-weight:bold;">Join Chip SMP</div>
+<p id="server-ip">https://discord.gg/MgPYSuJjNb</p>
+<button onclick="copyIP()">Copy Discord</button>
+</div>
+</div>
+
+<div class="status-card">
+<span id="status-dot">🔴</span>
+<span id="status-text">Offline</span> —
+<span id="player-count">0</span> players online
+
+<div class="player-list" id="player-list">
+No players online
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function copyIP(){
+navigator.clipboard.writeText("https://discord.gg/MgPYSuJjNb");
+alert("Discord link copied!");
+}
+
+const SERVER_IP = "step-queue.gl.joinmc.link";
+
+async function updateServerStatus(){
+
+try{
+
+const res = await fetch(`https://api.mcstatus.io/v2/status/java/${SERVER_IP}`);
+const data = await res.json();
+
+if(data.online){
+
+document.getElementById("status-dot").textContent="🟢";
+document.getElementById("status-text").textContent="Online";
+document.getElementById("player-count").textContent =
+data.players.online + " / " + data.players.max;
+
+const list = document.getElementById("player-list");
+
+if(data.players.list && data.players.list.length > 0){
+
+let players = data.players.list.slice(0,10);
+
+let html = "";
+
+players.forEach(player => {
+
+html += `
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+<img src="https://mc-heads.net/avatar/${player.name_clean}/24" style="border-radius:4px;">
+<span>${player.name_clean}</span>
+</div>
+`;
+
+});
+
+list.innerHTML = html;
+
+}else{
+
+list.textContent = "No players online";
+
+}
+
+}else{
+
+document.getElementById("status-dot").textContent="🔴";
+document.getElementById("status-text").textContent="Offline";
+document.getElementById("player-count").textContent="0";
+document.getElementById("player-list").textContent="Server offline";
+
+}
+
+}catch{
+
+document.getElementById("status-dot").textContent="🔴";
+document.getElementById("status-text").textContent="Offline";
+document.getElementById("player-count").textContent="0";
+document.getElementById("player-list").textContent="Server offline";
+
+}
+
+}
+
+updateServerStatus();
+setInterval(updateServerStatus,5000);
+
+</script>
+
+</body>
+</html>
