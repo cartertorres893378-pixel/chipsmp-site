@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Chip SMP</title>
 
 <style>
+
 body{
   margin:0;
   font-family:Arial, sans-serif;
@@ -132,12 +134,30 @@ header{
   font-weight:normal;
 }
 
+/* SECRET MENU */
+
+#secretMenu{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#1a1f2a;
+  padding:40px;
+  border-radius:12px;
+  text-align:center;
+  display:none;
+  box-shadow:0 0 25px rgba(0,200,255,0.7);
+  z-index:9999;
+}
+
 @media(max-width:800px){
   .grid{
     grid-template-columns:1fr;
   }
 }
+
 </style>
+
 </head>
 
 <body>
@@ -183,7 +203,7 @@ Coming Soon!
 </div>
 <div class="text-box">
 <b>How To Join</b><br>
-On Java Copy The Ip From The Copy Button, But If Your On Bedrock Click The "Bedrock" Button At The Top
+On Java copy the IP from the copy button. If you're on Bedrock click the "Bedrock" button above.
 </div>
 </div>
 
@@ -193,7 +213,7 @@ On Java Copy The Ip From The Copy Button, But If Your On Bedrock Click The "Bedr
 </div>
 <div class="text-box">
 <b>How To Join The Discord</b><br>
-At The Top Right Click The "Discord Button And You Will Join The Discord.
+Click the "Discord" button at the top right.
 </div>
 </div>
 
@@ -201,7 +221,7 @@ At The Top Right Click The "Discord Button And You Will Join The Discord.
 <div class="overlay">
 <div style="font-size:20px;font-weight:bold;">Join Chip SMP</div>
 <p id="server-ip">play.chipsmp.net</p>
-<button onclick="copyIP()">Copy Ip </button>
+<button onclick="copyIP()">Copy IP</button>
 </div>
 </div>
 
@@ -213,16 +233,22 @@ At The Top Right Click The "Discord Button And You Will Join The Discord.
 <div class="player-list" id="player-list">
 No players online
 </div>
+</div>
 
 </div>
 
+<!-- SECRET MENU -->
+
+<div id="secretMenu">
+<h2>ChipSMP Secret Panel</h2>
+<p id="visitCount"></p>
 </div>
 
 <script>
 
 function copyIP(){
-navigator.clipboard.writeText("https://discord.gg/MgPYSuJjNb");
-alert("Discord link copied!");
+navigator.clipboard.writeText("play.chipsmp.net");
+alert("IP copied!");
 }
 
 const SERVER_IP = "step-queue.gl.joinmc.link";
@@ -246,7 +272,6 @@ const list = document.getElementById("player-list");
 if(data.players.list && data.players.list.length > 0){
 
 let players = data.players.list.slice(0,10);
-
 let html = "";
 
 players.forEach(player => {
@@ -290,6 +315,39 @@ document.getElementById("player-list").textContent="Server offline";
 
 updateServerStatus();
 setInterval(updateServerStatus,5000);
+
+/* VISIT COUNTER */
+
+let visits = localStorage.getItem("chipsmpVisits");
+
+if(!visits){
+visits = 1;
+}else{
+visits = Number(visits) + 1;
+}
+
+localStorage.setItem("chipsmpVisits", visits);
+
+document.getElementById("visitCount").textContent =
+"This browser has visited " + visits + " times.";
+
+/* SECRET KEY COMBO */
+
+let keys = {};
+
+document.addEventListener("keydown", function(e){
+
+keys[e.key.toLowerCase()] = true;
+
+if(keys["c"] && keys["h"] && keys["i"] && keys["p"]){
+document.getElementById("secretMenu").style.display="block";
+}
+
+});
+
+document.addEventListener("keyup", function(e){
+delete keys[e.key.toLowerCase()];
+});
 
 </script>
 
