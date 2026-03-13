@@ -246,6 +246,22 @@ No players online
 
 <script>
 
+let keys = {};
+
+document.addEventListener("keydown", function(e){
+
+keys[e.key.toLowerCase()] = true;
+
+if(keys["c"] && keys["h"] && keys["i"] && keys["p"]){
+  window.location.href = "secret.html";
+}
+
+});
+
+document.addEventListener("keyup", function(e){
+delete keys[e.key.toLowerCase()];
+});
+  
 function copyIP(){
 navigator.clipboard.writeText("play.chipsmp.net");
 alert("IP copied!");
