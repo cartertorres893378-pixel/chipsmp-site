@@ -240,6 +240,16 @@ No players online
 
 <script>
 
+let visits = localStorage.getItem("chipsmpVisits");
+
+if(!visits){
+visits = 1;
+}else{
+visits = Number(visits) + 1;
+}
+
+localStorage.setItem("chipsmpVisits", visits);
+  
 function copyIP(){
 navigator.clipboard.writeText("play.chipsmp.net");
 alert("IP copied!");
