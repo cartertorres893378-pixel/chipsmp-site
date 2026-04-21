@@ -265,7 +265,7 @@ async function updateServerStatus(){
 
 try{
 
-const res = await fetch(`https://api.mcstatus.io/v2/status/java/${SERVER_IP}`);
+const res = await fetch(`https://api.mcsrvstat.us/2/${SERVER_IP}`);
 const data = await res.json();
 
 if(data.online){
@@ -273,7 +273,7 @@ if(data.online){
 document.getElementById("status-dot").textContent="🟢";
 document.getElementById("status-text").textContent="Online";
 document.getElementById("player-count").textContent =
-data.players.online + " / " + data.players.max;
+(data.players?.online || 0) + " / " + (data.players?.max || 0);
 
 const list = document.getElementById("player-list");
 
