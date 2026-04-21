@@ -1,11 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Chip SMP</title>
 
 <style>
-
 body{
   margin:0;
   font-family:Arial, sans-serif; 
@@ -67,16 +67,10 @@ header{
   transform:scale(1.02);
 }
 
-.img-box{
-  width:100%;
-  height:100%;
-}
-
 .img-box img{
   width:100%;
   height:100%;
   object-fit:cover;
-  display:block;
 }
 
 .text-box{
@@ -86,7 +80,6 @@ header{
   right:0;
   background:linear-gradient(transparent,rgba(0,0,0,0.9));
   padding:15px;
-  font-size:15px;
 }
 
 .copy-card{
@@ -104,8 +97,8 @@ header{
 }
 
 .copy-card button{
-  background:#00c8ff;
-  color:black;
+  background:#5865F2;
+  color:white;
   border:none;
   padding:10px 18px;
   border-radius:6px;
@@ -114,37 +107,19 @@ header{
 }
 
 .copy-card button:hover{
-  box-shadow:0 0 15px rgba(0,200,255,0.9);
+  box-shadow:0 0 15px rgba(88,101,242,0.9);
 }
 
 .status-card{
   background:#111;
   border-radius:14px;
-  padding:18px 20px;
-  font-size:20px;
-  font-weight:bold;
+  padding:18px;
   text-align:center;
-  box-shadow:0 0 25px rgba(0,255,0,0.15);
 }
 
 .player-list{
   margin-top:10px;
-  font-size:16px;
-  font-weight:normal;
-}
-
-#secretMenu{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:#1a1f2a;
-  padding:40px;
-  border-radius:12px;
-  text-align:center;
-  display:none;
-  box-shadow:0 0 25px rgba(0,200,255,0.7);
-  z-index:9999;
+  font-size:14px;
 }
 
 @media(max-width:800px){
@@ -152,8 +127,8 @@ header{
     grid-template-columns:1fr;
   }
 }
-
 </style>
+
 </head>
 
 <body>
@@ -163,7 +138,7 @@ header{
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="store.html">Store</a>
-    <a href="https://discord.gg/MgPYSuJjNb" target="_blank">Discord</a>
+    <a href="https://discord.gg/UfRKvtFBC2" target="_blank">Discord</a>
     <a href="partners.html">Partners</a>
     <a href="Bedrock.html">Bedrock</a>
     <a href="tos.html">Terms Of Service</a>
@@ -174,183 +149,68 @@ header{
 
 <div class="grid">
 
-<div class="card">
-<div class="img-box">
-<img src="images/trump.png">
-</div>
-<div class="text-box">
-<b>Welcome</b><br>
-A fun survival server with custom features, events, and an awesome community.
-</div>
-</div>
-
-<div class="card">
-<div class="img-box">
-<img src="images/store-2.png">
-</div>
-<div class="text-box">
-<b>Store</b><br>
-Coming Soon!
-</div>
-</div>
-
-<div class="card">
-<div class="img-box">
-<img src="images/chipsmp2.png">
-</div>
-<div class="text-box">
-<b>How To Join</b><br>
-On Java copy the IP from the copy button. If you're on Bedrock click the Bedrock button above.
-</div>
-</div>
-
-<div class="card">
-<div class="img-box">
-<img src="images/67.jpg">
-</div>
-<div class="text-box">
-<b>How To Join The Discord</b><br>
-Click the Discord button at the top right.
-</div>
-</div>
-
 <div class="card copy-card">
 <div class="overlay">
-<div style="font-size:20px;font-weight:bold;">Join Chip SMP Discord/div>
-<p id="Discord Link"></p>
-<button onclick="copyIP()">Copy IP</button>
+<div style="font-size:20px;font-weight:bold;">Join Our Discord</div>
+<button onclick="copyDiscord()">Copy Discord Invite</button>
 </div>
 </div>
 
 <div class="status-card">
 <span id="status-dot">🔴</span>
 <span id="status-text">Offline</span> —
-<span id="player-count">0</span> players online
+<span id="player-count">0</span> players
 
 <div class="player-list" id="player-list">
-No players online
+Checking...
 </div>
 </div>
 
-</div>
-
-<div id="secretMenu">
-<h2>ChipSMP Secret Panel</h2>
-<p id="visitCount"></p>
 </div>
 
 <script>
 
-let visits = localStorage.getItem("chipsmpVisits");
-
-if(!visits){
-visits = 1;
-}else{
-visits = Number(visits) + 1;
+// COPY DISCORD
+function copyDiscord(){
+navigator.clipboard.writeText("https://discord.gg/UfRKvtFBC2");
+alert("Discord invite copied!");
 }
 
-localStorage.setItem("chipsmpVisits", visits);
-  
-function copyIP(){
-navigator.clipboard.writeText("play.chipsmp.net");
-alert("IP copied!");
-}
-
-const SERVER_IP = "leading-merge.gl.joinmc.link";
+// SERVER STATUS
+const SERVER_IP = "play.chipsmp.net";
 
 async function updateServerStatus(){
-
 try{
-
-const res = await fetch(`https://api.mcstatus.io/v2/status/java/${SERVER_IP}`);
+const res = await fetch(`https://api.mcsrvstat.us/2/${SERVER_IP}`);
 const data = await res.json();
 
 if(data.online){
-
 document.getElementById("status-dot").textContent="🟢";
 document.getElementById("status-text").textContent="Online";
 document.getElementById("player-count").textContent =
-data.players.online + " / " + data.players.max;
+data.players.online + "/" + data.players.max;
 
-const list = document.getElementById("player-list");
-
-if(data.players.list && data.players.list.length > 0){
-
-let players = data.players.list.slice(0,10);
-let html = "";
-
-players.forEach(player => {
-
-html += `
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-<img src="https://mc-heads.net/avatar/${player.name_clean}/24" style="border-radius:4px;">
-<span>${player.name_clean}</span>
-</div>
-`;
-
-});
-
-list.innerHTML = html;
-
+if(data.players.list){
+document.getElementById("player-list").innerHTML =
+data.players.list.join("<br>");
 }else{
-
-list.textContent = "No players online";
-
+document.getElementById("player-list").textContent="No players online";
 }
 
 }else{
-
 document.getElementById("status-dot").textContent="🔴";
 document.getElementById("status-text").textContent="Offline";
 document.getElementById("player-count").textContent="0";
 document.getElementById("player-list").textContent="Server offline";
-
 }
 
 }catch{
-
-document.getElementById("status-dot").textContent="🔴";
-document.getElementById("status-text").textContent="Offline";
-document.getElementById("player-count").textContent="0";
-document.getElementById("player-list").textContent="Server offline";
-
+document.getElementById("status-text").textContent="Error";
 }
-
 }
 
 updateServerStatus();
-setInterval(updateServerStatus,5000);
-
-let keys = {};
-
-document.addEventListener("keydown", function(e){
-
-keys[e.key.toLowerCase()] = true;
-
-if(keys["c"] && keys["h"] && keys["i"] && keys["p"]){
-
-let visits = localStorage.getItem("chipsmpVisits");
-
-if(!visits){
-visits = 1;
-}else{
-visits = Number(visits) + 1;
-}
-
-localStorage.setItem("chipsmpVisits", visits);
-
-document.getElementById("visitCount").textContent =
-"This browser opened the secret panel " + visits + " times.";
-
-window.location.href = "secret.html";
-
-}
-
-});
-
-document.addEventListener("keyup", function(e){
-delete keys[e.key.toLowerCase()];
-});
+setInterval(updateServerStatus, 15000);
 
 </script>
 
