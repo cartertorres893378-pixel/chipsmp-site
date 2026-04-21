@@ -273,11 +273,11 @@ if(data.online){
 document.getElementById("status-dot").textContent="🟢";
 document.getElementById("status-text").textContent="Online";
 document.getElementById("player-count").textContent =
-(data.players?.online || 0) + " / " + (data.players?.max || 0);
+data.players.online + " / " + data.players.max;
 
 const list = document.getElementById("player-list");
 
-if(data.players && data.players.list && data.players.list.length > 0){
+if(data.players && data.players.sample && data.players.sample.length > 0){
 
 let players = data.players.list.slice(0,10);
 let html = "";
