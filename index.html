@@ -277,7 +277,7 @@ document.getElementById("player-count").textContent =
 
 const list = document.getElementById("player-list");
 
-if(data.players.list && data.players.list.length > 0){
+if(data.players && data.players.list && data.players.list.length > 0){
 
 let players = data.players.list.slice(0,10);
 let html = "";
@@ -286,8 +286,8 @@ players.forEach(player => {
 
 html += `
 <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-<img src="https://mc-heads.net/avatar/${player.name_clean}/24" style="border-radius:4px;">
-<span>${player.name_clean}</span>
+<img src="https://mc-heads.net/avatar/${player}/24" style="border-radius:4px;">
+<span>${player}</span>
 </div>
 `;
 
@@ -298,6 +298,8 @@ list.innerHTML = html;
 }else{
 
 list.textContent = "No players online";
+
+}
 
 }
 
