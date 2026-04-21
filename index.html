@@ -252,13 +252,11 @@ visits = Number(visits) + 1;
 
 localStorage.setItem("chipsmpVisits", visits);
 
-// FIXED FUNCTION
 function copyDiscord(){
 navigator.clipboard.writeText("https://discord.gg/UfRKvtFBC2");
 alert("Discord invite copied!");
 }
 
-// FIXED SERVER IP
 const SERVER_IP = "leading-merge.gl.joinmc.link";
 
 async function updateServerStatus(){
@@ -279,15 +277,15 @@ const list = document.getElementById("player-list");
 
 if(data.players && data.players.sample && data.players.sample.length > 0){
 
-let players = data.players.list.slice(0,10);
+let players = data.players.sample.slice(0,10);
 let html = "";
 
 players.forEach(player => {
 
 html += `
 <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-<img src="https://mc-heads.net/avatar/${player}/24" style="border-radius:4px;">
-<span>${player}</span>
+<img src="https://mc-heads.net/avatar/${player.name}/24" style="border-radius:4px;">
+<span>${player.name}</span>
 </div>
 `;
 
@@ -298,8 +296,6 @@ list.innerHTML = html;
 }else{
 
 list.textContent = "No players online";
-
-}
 
 }
 
